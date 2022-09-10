@@ -1,47 +1,61 @@
 package ru.netology;
 
 public class Radio {
-    public int currentRadioStation;
-    public int currentVolume;
+    private int currentStation;
+    protected int currentVolume;
+    private int maxStation;
+    private int minStation = 0;
+    private int maxVolume = 100;
+    private int minVolume = 0;
 
-    public int getCurrentRadioStation() {
-        return currentRadioStation;
+    public Radio() {
+        maxStation = 9;
     }
 
-    public void setCurrentRadioStation(int newCurrentRadioStation) {
-        if (newCurrentRadioStation < 0) {
-            return;
-        } else if (newCurrentRadioStation > 9) {
-            return;
-        }
-        currentRadioStation = newCurrentRadioStation;
+    public Radio(int stationsCount) {
+        maxStation = stationsCount - 1;
+
     }
 
-    public void nextRadioStation() {
-        if (currentRadioStation < 9) {
-            currentRadioStation = currentRadioStation + 1;
-        } else currentRadioStation = 0;
-    }
-
-    public void prevButtonStation() {
-        if (currentRadioStation > 0) {
-            currentRadioStation = currentRadioStation - 1;
-        } else currentRadioStation = 9;
-    }
-
-    public void volumePlus() {
-        if (currentVolume < 10) {
-            currentVolume = currentVolume + 1;
-        } else {
-            currentVolume = 10;
+    public void upVolume() {
+        if (currentVolume < maxVolume) {
+            currentVolume = currentVolume + 1; // звук +
         }
     }
 
-    public void volumeMinus() {
-        if (currentVolume > 0) {
-            currentVolume = currentVolume - 1;
+    public void downVolume() {
+        if (currentVolume > minVolume) {
+            currentVolume = currentVolume - 1; // звук -
+        }
+    }
+
+    public void setCurrentStation(int currentStation) {
+        if (currentStation > maxStation) {
+            return;
+        }
+        if (currentStation < minStation) {
+            return;
+        }
+        this.currentStation = currentStation;
+    }
+
+    public int getCurrentStation() {
+        return currentStation;
+    }
+
+    public void upStation() {
+        if (currentStation == maxStation) { // станция +
+            currentStation = minStation;
         } else {
-            currentVolume = 0;
+            currentStation = currentStation + 1;
+        }
+    }
+
+    public void downStation() {
+        if (currentStation == minStation) { //станция -
+            currentStation = maxStation;
+        } else {
+            currentStation = currentStation - 1;
         }
     }
 }

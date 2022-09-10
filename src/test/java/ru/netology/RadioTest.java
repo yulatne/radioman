@@ -3,169 +3,138 @@ package ru.netology;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class RadioTest {
-    @Test
-    public void shouldSetRadioStation() {
-        Radio radio = new Radio();
-        radio.setCurrentRadioStation(3);
-        int expected = 3;
-        int actual = radio.getCurrentRadioStation();
 
-        Assertions.assertEquals(expected, actual);
-
+    @Test // возможность выставление 19й станции из 20
+    public void test() {
+        Radio radio = new Radio(20);
+        radio.setCurrentStation(19);
+        assertEquals(19, radio.getCurrentStation());
     }
 
     @Test
-    public void shouldMaxSetRadioStation() {
+        //повышение станции
+    void shouldUpStation() {
         Radio radio = new Radio();
-        radio.setCurrentRadioStation(50);
-        int expected = 0;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldMinSetRadioStation() {
-        Radio radio = new Radio();
-        radio.setCurrentRadioStation(-1);
-        int expected = 0;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldNextRadioStation() {
-        Radio radio = new Radio();
-        radio.setCurrentRadioStation(4);
-        radio.nextRadioStation();
-        int expected = 5;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldNextRadioStationZero() {
-        Radio radio = new Radio();
-        radio.setCurrentRadioStation(0);
-        radio.nextRadioStation();
         int expected = 1;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
+        radio.upStation();
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldNextRadioStation9() {
-        Radio radio = new Radio();
-        radio.setCurrentRadioStation(9);
-        radio.nextRadioStation();
-        int expected = 0;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldNextRadioStation8() {
-        Radio radio = new Radio();
-        radio.setCurrentRadioStation(8);
-        radio.nextRadioStation();
+        //понижение станции
+    void shouldDownStation() {
+        Radio radio = new Radio(10);
+        radio.setCurrentStation(10);
+        radio.downStation();
         int expected = 9;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldNextRadioStation1() {
-        Radio radio = new Radio();
-        radio.setCurrentRadioStation(1);
-        radio.nextRadioStation();
-        int expected = 2;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
+        //переход вперед от станции = 9
+    void shouldAfter9To0Station() {
+        Radio radio = new Radio(10);
+        radio.setCurrentStation(9);
+        radio.upStation();
+        int expected = 0;
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldNextRadioStationMinus() {
+        //переход назад от станции = 0
+    void shouldTransitFrom0To9Station() {
+        Radio radio = new Radio(10);
+        radio.setCurrentStation(0);
+        radio.downStation();
+        int expected = 9;
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+        //переход назад от станции = 1
+    void shouldTransitFromMinus1() {
+        Radio radio = new Radio(10);
+        radio.setCurrentStation(1);
+        radio.downStation();
+        int expected = 0;
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
+    }
+
+
+    @Test
+        //ввод станции
+    void shouldSetCurrentStation() {
+        Radio radio = new Radio(10);
+        int expected = 4;
+        radio.setCurrentStation(expected);
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+        //ввод станции больше максимума
+    void shouldSetCurrentStationPlusMax() {
+        Radio radio = new Radio(10);
+        int expected = 0;
+        radio.setCurrentStation(12);
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+        // ввод станции меньше минимума
+    void shouldSetCurrentStationMinusMin() {
         Radio radio = new Radio();
-        radio.setCurrentRadioStation(-1);
-        radio.nextRadioStation();
+        int expected = 0;
+        radio.setCurrentStation(-12);
+        int actual = radio.getCurrentStation();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldUpVolume1() {
+        Radio radio = new Radio();
         int expected = 1;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
+        radio.upVolume();
+        int actual = radio.currentVolume; // повышение звука
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldPrevRadioStation() {
+    void shouldNotUpVolume100() {
         Radio radio = new Radio();
-        radio.setCurrentRadioStation(9);
-        radio.prevButtonStation();
-        int expected = 8;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldPrevRadioStation0() {
-        Radio radio = new Radio();
-        radio.setCurrentRadioStation(0);
-        radio.prevButtonStation();
-        int expected = 9;
-        int actual = radio.getCurrentRadioStation();
-
-        Assertions.assertEquals(expected, actual);
-
-    }
-
-    @Test
-    public void shouldVolumePlus() {
-        Radio radio = new Radio();
-        radio.currentVolume = 5;
-        radio.volumePlus();
-        int expected = 6;
+        int expected = 100;
+        radio.currentVolume = expected; // повысить звук при = 100
+        radio.upVolume();
         int actual = radio.currentVolume;
-
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldVolumePlus10() {
+    void shouldDownVolumeFrom1() {
         Radio radio = new Radio();
-        radio.currentVolume = 10;
-        radio.volumePlus();
-        int expected = 10;
+        int expected = 1;
+        radio.currentVolume = 2; // понижение звука
+        radio.downVolume();
         int actual = radio.currentVolume;
-
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldVolumeMinus() {
+    void shouldDownVolumeFrom0() {
         Radio radio = new Radio();
-        radio.currentVolume = 10;
-        radio.volumeMinus();
-        int expected = 9;
-        int actual = radio.currentVolume;
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldVolumeMinus0() {
-        Radio radio = new Radio();
-        radio.currentVolume = 0;
-        radio.volumeMinus();
         int expected = 0;
-        int actual = radio.currentVolume;
-
-        Assertions.assertEquals(expected, actual);
+        radio.downVolume();
+        int actual = radio.currentVolume; // понижение звука при = 0
+        assertEquals(expected, actual);
     }
 }
 
